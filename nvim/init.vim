@@ -7,9 +7,10 @@ call plug#begin('~/.config/nvim/bundle')
 
 " General plugins
 Plug 'w0rp/ale'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'itchyny/lightline.vim'
-Plug 'mgee/lightline-bufferline'
+"Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'scrooloose/nerdtree'
@@ -31,7 +32,7 @@ Plug 'dracula/vim'
 Plug 'arcticicestudio/nord-vim' " should be used with nord-iterm2
 
 " Language plugins
-Plug 'fatih/vim-go', { 'tag': 'v1.18', 'do': ':GoInstallBinaries' }
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'zchee/deoplete-go', { 'do': 'make'}
 Plug 'ternjs/tern_for_vim', { 'do': 'npm install', 'for': ['javascript'] }
 Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
@@ -64,6 +65,7 @@ set smartcase
 set backspace=2
 set clipboard=unnamedplus
 set tags=./tags;,tags;
+set mouse=a
 filetype plugin indent on
 
 " Softtabs
@@ -84,6 +86,10 @@ set foldnestmax=5
 set foldlevel=5
 set foldlevelstart=5
 set nofoldenable
+
+" auto save
+set updatetime=200
+au CursorHold * silent! update
 
 " persistent undo
 if has('persistent_undo')
@@ -112,10 +118,9 @@ augroup vimrcEx
 
   " Set syntax highlighting for specific file types
   autocmd BufRead,BufNewFile *.md set filetype=markdown
+  autocmd BufRead,BufNewFile *.ejs set filetype=html
   autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
-  autocmd BufNewFile,BufRead *.{python,js} setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
   autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
-  autocmd BufNewFile,BufRead *.proto setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
   autocmd BufEnter * EnableStripWhitespaceOnSave
 augroup END
 
@@ -132,31 +137,27 @@ let g:nord_italic = 1
 let g:nord_uniform_diff_background = 1
 
 " lightline
-set showtabline=2
-let g:lightline#bufferline#unnamed = '[No Name]'
-let g:lightline = {
-      \ 'tabline': {
-      \   'left': [['buffers']],
-      \   'right': [[ 'close' ]]
-      \ },
-      \ 'colorscheme': 'nord',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_expand': {
-      \   'buffers': 'lightline#bufferline#buffers',
-      \ },
-      \ 'component_type': {
-      \   'buffers': 'tabsel',
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'fugitive#head'
-      \ },
-      \ }
+"let g:lightline = {
+"      \ 'colorscheme': 'nord',
+"      \ 'active': {
+"      \   'left': [ [ 'mode', 'paste' ],
+"      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+"      \ },
+"      \ 'component_function': {
+"      \   'gitbranch': 'fugitive#head'
+"      \ },
+"      \ }
+
+" vim-airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
 
 " custom key maps
 let mapleader=' '
+nnoremap <Left> :echoe "Use h"<cr>
+nnoremap <Right> :echoe "Use l"<cr>
+nnoremap <Up> :echoe "Use k"<cr>
+nnoremap <Down> :echoe "Use j"<cr>
 nnoremap <Leader>w :w<cr>
 nnoremap <Leader>nh :noh<cr><c-l>
 nnoremap <Leader><tab> :b#<cr>
@@ -191,6 +192,7 @@ let NERDTreeShowHidden = 1
 let g:NERDTreeMapOpenSplit = "x"
 let g:NERDTreeMapOpenVSplit = "v"
 map <Leader>d :NERDTreeToggle<cr>
+" autocmd VimEnter * NERDTree
 
 " nerdcommenter
 let g:NERDSpaceDelims = 1
@@ -198,6 +200,8 @@ let g:NERDCompactSexyComs = 1
 let g:NERDDefaultAlign = 'left'
 let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhiteSpace = 1
+
+" gitgutter
 
 " fzf.vim
 let g:fzf_layout = { 'down': '~25%' }
@@ -240,7 +244,8 @@ let g:deoplete#sources#ternjs#docs = 1
 " deplete-go
 let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-" let g:deoplete#sources#go#pointer = 1
+let g:deoplete#sources#go#use_cache = 0
+let g:deoplete#sources#go#json_directory = ''
 
 " ultisnips
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -267,35 +272,25 @@ autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
 
 " ALE
 let g:ale_open_list = 1
-let g:ale_list_window_size = 3
+let g:ale_list_window_size = 5
+let g:ale_sign_error = '⤫'
+let g:ale_sign_warning = '⚠'
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] [%severity%] %s'
-let g:ale_linters_explicit = 1
-let g:ale_fix_on_save = 1
 let g:ale_linters = {
 \   'javascript': ['eslint'],
-\   'go': ['golangci-lint'],
+\   'go': ['gometalinter'],
 \}
-let g:ale_fixers = {
-\   'javascript': ['prettier', 'eslint']
-\}
-let g:ale_go_golangci_lint_options = '-j 4 --disable-all'
-\ . ' --enable=govet'
+let g:ale_go_gometalinter_options = '--disable-all'
+\ . ' --enable=vet'
 \ . ' --enable=golint'
 \ . ' --enable=errcheck'
 \ . ' --enable=ineffassign'
-\ . ' --enable=misspell'
-\ . ' --enable=deadcode'
-" let g:ale_go_gometalinter_options = '--disable-all'
-" \ . ' --enable=vet'
-" \ . ' --enable=golint'
-" \ . ' --enable=errcheck'
-" \ . ' --enable=ineffassign'
-" \ . ' --enable=goconst'
-" \ . ' --enable=goimports'
-" \ . ' --enable=lll --line-length=120'
+\ . ' --enable=goconst'
+\ . ' --enable=goimports'
+\ . ' --enable=lll --line-length=120'
 " These are slow (>2s)
 " \ . ' --enable=varcheck'
 " \ . ' --enable=interfacer'
@@ -344,7 +339,6 @@ let g:tagbar_type_go = {
 let g:go_fmt_command = "goimports"
 let g:go_list_type = "quickfix"
 let g:go_auto_type_info = 1
-set updatetime=1500
 let g:go_metalinter_autosave = 0
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1

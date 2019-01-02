@@ -4,7 +4,7 @@ export ZSH=~/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+#ZSH_THEME="robbyrussell"
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
@@ -49,3 +49,25 @@ export NVM_DIR="$HOME/.nvm"
 
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 bindkey '^ ' autosuggest-accept
+
+# Customise the Powerlevel9k prompts
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
+  custom_medium dir vcs newline status
+)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
+POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+## Add the custom Medium M icon prompt segment
+POWERLEVEL9K_CUSTOM_MEDIUM="echo -n $'\uE711'"
+POWERLEVEL9K_CUSTOM_MEDIUM_FOREGROUND="black"
+POWERLEVEL9K_CUSTOM_MEDIUM_BACKGROUND="white"
+## Add the custom freeCodeCamp prompt segment
+POWERLEVEL9K_CUSTOM_FREECODECAMP="echo Vita"
+POWERLEVEL9K_CUSTOM_FREECODECAMP_FOREGROUND="white"
+POWERLEVEL9K_CUSTOM_FREECODECAMP_BACKGROUND="cyan"
+## Load Nerd Fonts with Powerlevel9k theme for Zsh
+ddPOWERLEVEL9K_MODE='nerdfont-complete'
+source ~/powerlevel9k/powerlevel9k.zsh-theme
+
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
+#   if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
