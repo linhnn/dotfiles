@@ -71,3 +71,5 @@ source ~/powerlevel9k/powerlevel9k.zsh-theme
 # eval "$(pyenv init -)"
 # eval "$(pyenv virtualenv-init -)"
 #   if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
