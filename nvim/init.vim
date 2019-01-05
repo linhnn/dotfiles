@@ -118,9 +118,11 @@ augroup vimrcEx
 
   " Set syntax highlighting for specific file types
   autocmd BufRead,BufNewFile *.md set filetype=markdown
-  autocmd BufRead,BufNewFile *.ejs set filetype=html
   autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
+  autocmd BufNewFile,BufRead *.{js} setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
+  autocmd BufNewFile,BufRead *.{python} setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
   autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
+  autocmd BufNewFile,BufRead *.proto setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
   autocmd BufEnter * EnableStripWhitespaceOnSave
 augroup END
 
@@ -137,16 +139,28 @@ let g:nord_italic = 1
 let g:nord_uniform_diff_background = 1
 
 " lightline
-"let g:lightline = {
-"      \ 'colorscheme': 'nord',
-"      \ 'active': {
-"      \   'left': [ [ 'mode', 'paste' ],
-"      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-"      \ },
-"      \ 'component_function': {
-"      \   'gitbranch': 'fugitive#head'
-"      \ },
-"      \ }
+set showtabline=2
+let g:lightline#bufferline#unnamed = '[No Name]'
+let g:lightline = {
+      \ 'tabline': {
+      \   'left': [['buffers']],
+      \   'right': [[ 'close' ]]
+      \ },
+      \ 'colorscheme': 'nord',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_expand': {
+      \   'buffers': 'lightline#bufferline#buffers',
+      \ },
+      \ 'component_type': {
+      \   'buffers': 'tabsel',
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head'
+      \ },
+      \ }
 
 " vim-airline
 let g:airline#extensions#tabline#enabled = 1
@@ -154,10 +168,6 @@ let g:airline_powerline_fonts = 1
 
 " custom key maps
 let mapleader=' '
-nnoremap <Left> :echoe "Use h"<cr>
-nnoremap <Right> :echoe "Use l"<cr>
-nnoremap <Up> :echoe "Use k"<cr>
-nnoremap <Down> :echoe "Use j"<cr>
 nnoremap <Leader>w :w<cr>
 nnoremap <Leader>nh :noh<cr><c-l>
 nnoremap <Leader><tab> :b#<cr>
@@ -272,7 +282,7 @@ autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
 
 " ALE
 let g:ale_open_list = 1
-let g:ale_list_window_size = 5
+let g:ale_list_window_size = 3
 let g:ale_sign_error = '⤫'
 let g:ale_sign_warning = '⚠'
 let g:ale_lint_on_text_changed = 'never'
@@ -291,12 +301,6 @@ let g:ale_go_gometalinter_options = '--disable-all'
 \ . ' --enable=goconst'
 \ . ' --enable=goimports'
 \ . ' --enable=lll --line-length=120'
-" These are slow (>2s)
-" \ . ' --enable=varcheck'
-" \ . ' --enable=interfacer'
-" \ . ' --enable=unconvert'
-" \ . ' --enable=structcheck'
-" \ . ' --enable=megacheck'
 
 " vim-tmux-navigator
 if has('nvim')
@@ -339,6 +343,7 @@ let g:tagbar_type_go = {
 let g:go_fmt_command = "goimports"
 let g:go_list_type = "quickfix"
 let g:go_auto_type_info = 1
+set updatetime=1500
 let g:go_metalinter_autosave = 0
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
