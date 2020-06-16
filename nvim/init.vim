@@ -9,7 +9,7 @@ call plug#begin('~/.config/nvim/bundle')
 Plug 'w0rp/ale'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'itchyny/lightline.vim'
 Plug 'mgee/lightline-bufferline'
 Plug 'maximbaz/lightline-ale'
@@ -22,7 +22,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
-Plug 'ntpeters/vim-better-whitespace'
+"Plug 'ntpeters/vim-better-whitespace'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'SirVer/ultisnips'
@@ -37,7 +37,8 @@ Plug 'morhetz/gruvbox'
 
 " Language plugins
 Plug 'fatih/vim-go', { 'tag': '*' }
-Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+"Plug 'Shougo/deoplete.nvim'
+"Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 Plug 'ternjs/tern_for_vim', { 'do': 'npm install', 'for': ['javascript'] }
 Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 Plug 'tomlion/vim-solidity'
@@ -127,7 +128,7 @@ augroup vimrcEx
   autocmd BufNewFile,BufRead *.{python,sh} setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
   autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
   autocmd BufNewFile,BufRead *.proto setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
-  autocmd BufEnter * EnableStripWhitespaceOnSave
+  "autocmd BufEnter * EnableStripWhitespaceOnSave
 augroup END
 
 " js folding

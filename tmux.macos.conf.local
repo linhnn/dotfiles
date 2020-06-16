@@ -90,9 +90,24 @@ tmux_conf_theme_status_fg='#8a8a8a'                     # light gray
 tmux_conf_theme_status_bg='#080808'                     # dark gray
 tmux_conf_theme_status_attr='none'
 
+# terminal title
+#   - built-in variables are:
+#     - #{circled_window_index}
+#     - #{circled_session_name}
+#     - #{hostname}
+#     - #{hostname_ssh}
+#     - #{username}
+#     - #{username_ssh}
+tmux_conf_theme_terminal_title='#h ❐ #S ● #I #W'
+
 # window status style
 #   - built-in variables are:
 #     - #{circled_window_index}
+#     - #{circled_session_name}
+#     - #{hostname}
+#     - #{hostname_ssh}
+#     - #{username}
+#     - #{username_ssh}
 tmux_conf_theme_window_status_fg='#8a8a8a'              # light gray
 tmux_conf_theme_window_status_bg='#080808'              # dark gray
 tmux_conf_theme_window_status_attr='none'
@@ -103,6 +118,11 @@ tmux_conf_theme_window_status_format='#I #W'
 # window current status style
 #   - built-in variables are:
 #     - #{circled_window_index}
+#     - #{circled_session_name}
+#     - #{hostname}
+#     - #{hostname_ssh}
+#     - #{username}
+#     - #{username_ssh}
 tmux_conf_theme_window_status_current_fg='#000000'      # black
 tmux_conf_theme_window_status_current_bg='#00afff'      # light blue
 tmux_conf_theme_window_status_current_attr='bold'
@@ -135,6 +155,13 @@ tmux_conf_theme_right_separator_sub='|'
 #tmux_conf_theme_right_separator_main='' #   Powerline symbols or the standalone
 #tmux_conf_theme_right_separator_sub=''  #   PowerlineSymbols.otf font
 
+# general status bar settings
+set -g status on
+set -g status-interval 5
+set -g status-position top
+set -g status-justify left
+set -g status-right-length 100
+
 # status left/right content:
 #   - separate main sections with '|'
 #   - separate subsections with ','
@@ -151,14 +178,15 @@ tmux_conf_theme_right_separator_sub='|'
 #     - #{pairing}
 #     - #{prefix}
 #     - #{root}
+#     - #{synchronized}
 #     - #{uptime_d}
 #     - #{uptime_h}
 #     - #{uptime_m}
 #     - #{uptime_s}
 #     - #{username}
 #     - #{username_ssh}
-tmux_conf_theme_status_left=' ❐ #S | ↑#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} '
-tmux_conf_theme_status_right='#{prefix}#{pairing} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
+tmux_conf_theme_status_left=' ❐ #S |'
+tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , #{sysstat_cpu}, #{sysstat_mem}, %R , %d %b | #{username}#{root} | #{hostname} '
 
 # status left style
 tmux_conf_theme_status_left_fg='#000000,#e4e4e4,#e4e4e4'  # black, white , white
@@ -187,6 +215,12 @@ tmux_conf_theme_root='!'
 tmux_conf_theme_root_fg='none'
 tmux_conf_theme_root_bg='none'
 tmux_conf_theme_root_attr='bold,blink'
+
+# synchronized indicator
+tmux_conf_theme_synchronized='🔒'     # U+1F512
+tmux_conf_theme_synchronized_fg='none'
+tmux_conf_theme_synchronized_bg='none'
+tmux_conf_theme_synchronized_attr='none'
 
 # battery bar symbols
 tmux_conf_battery_bar_symbol_full='◼'
@@ -221,11 +255,11 @@ tmux_conf_battery_vbar_palette='gradient'
 #tmux_conf_battery_vbar_palette='#d70000,#ff5f00,#5fff00'  # red, orange, green
 
 # symbols used to indicate whether battery is charging or discharging
-tmux_conf_battery_status_charging='↑'       # U+2191
-tmux_conf_battery_status_discharging='↓'    # U+2193
-#tmux_conf_battery_status_charging='⚡ '    # U+26A1
+#tmux_conf_battery_status_charging='↑'       # U+2191
+#tmux_conf_battery_status_discharging='↓'    # U+2193
+tmux_conf_battery_status_charging='⚡ '    # U+26A1
 #tmux_conf_battery_status_charging='🔌 '    # U+1F50C
-#tmux_conf_battery_status_discharging='🔋 ' # U+1F50B
+tmux_conf_battery_status_discharging='🔋 ' # U+1F50B
 
 # clock style
 tmux_conf_theme_clock_colour='#00afff'  # light blue
@@ -265,3 +299,4 @@ tmux_conf_copy_to_os_clipboard=false
 
 # move status line to top
 #set -g status-position top
+
