@@ -10,9 +10,7 @@ Plug 'w0rp/ale'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'itchyny/lightline.vim'
-Plug 'mgee/lightline-bufferline'
-Plug 'maximbaz/lightline-ale'
+"Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'scrooloose/nerdtree'
@@ -31,13 +29,11 @@ Plug 'majutsushi/tagbar'
 
 " colorscheme
 Plug 'dracula/vim'
-"Plug 'cticicestudio/nord-vim' " should be used with nord-iterm2
-Plug 'drewtempelmeyer/palenight.vim'
-Plug 'morhetz/gruvbox'
+Plug 'arcticicestudio/nord-vim' " should be used with nord-iterm2
 
 " Language plugins
-Plug 'fatih/vim-go', { 'tag': '*' }
-Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'zchee/deoplete-go', { 'do': 'make'}
 Plug 'ternjs/tern_for_vim', { 'do': 'npm install', 'for': ['javascript'] }
 Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 Plug 'tomlion/vim-solidity'
@@ -47,7 +43,7 @@ call plug#end()
 " General
 syntax on
 set number
-set lazyredraw
+set relativenumber
 set numberwidth=5
 set ruler
 set autoindent
@@ -107,8 +103,7 @@ endif
 " Colors
 set t_Co=256
 set termguicolors
-"colorscheme nord
-colorscheme gruvbox
+colorscheme nord
 
 augroup vimrcEx
   autocmd!
@@ -121,10 +116,11 @@ augroup vimrcEx
   \   exe "normal g`\"" |
   \ endif
 
+  " Set syntax highlighting for specific file types
   autocmd BufRead,BufNewFile *.md set filetype=markdown
   autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
   autocmd BufNewFile,BufRead *.{js} setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd BufNewFile,BufRead *.{python,sh} setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd BufNewFile,BufRead *.{python} setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
   autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
   autocmd BufNewFile,BufRead *.proto setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
   autocmd BufEnter * EnableStripWhitespaceOnSave
@@ -137,11 +133,6 @@ augroup jsFolds
   autocmd FileType javascript syntax region foldBraces start=/{/ end=/}/ transparent fold keepend extend
   autocmd FileType javascript set foldmethod=syntax
 augroup end
-
-" Triger `autoread` when files changes on disk
-" https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
-autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
-autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
 " nord-vim
 let g:nord_italic = 1
@@ -204,13 +195,14 @@ command! -bang -nargs=? -complete=file Wq wq<bang> <args>
 command! -bang -nargs=? -complete=file WQ wq<bang> <args>
 
 " write read-only file
-" cpromotion_menu_itemsmap w!! w !sudo tee % >/dev/null
+cmap w!! w !sudo tee % >/dev/null
 
 " NERDTree
 let NERDTreeShowHidden = 1
 let g:NERDTreeMapOpenSplit = "x"
 let g:NERDTreeMapOpenVSplit = "v"
 map <Leader>d :NERDTreeToggle<cr>
+" autocmd VimEnter * NERDTree
 
 " nerdcommenter
 let g:NERDSpaceDelims = 1
@@ -228,7 +220,7 @@ if executable('rg')
   let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*" --glob "!node_modules/*" --glob "!vendor/*"'
   command! -bang -nargs=* Rg
     \ call fzf#vim#grep(
-    \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 3,
+    \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
     \   <bang>0 ? fzf#vim#with_preview('up:60%')
     \           : fzf#vim#with_preview('right:50%:hidden', '?'),
     \   <bang>0)
@@ -240,8 +232,6 @@ elseif executable('ag')
     \   <bang>0 ? fzf#vim#with_preview('up:60%')
     \           : fzf#vim#with_preview('right:50%:hidden', '?'),
     \   <bang>0)
-  command! -bang -nargs=+ -complete=dir Rag
-    \ call fzf#vim#ag_raw(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
   nnoremap \ :Ag<SPACE>
 endif
 nnoremap <Leader>pf :Files<cr>
@@ -264,8 +254,8 @@ let g:deoplete#sources#ternjs#docs = 1
 " deplete-go
 let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-let g:deoplete#sources#go#builtin_objects = 1
-let g:deoplete#sources#go#unimported_packages = 1
+let g:deoplete#sources#go#use_cache = 0
+let g:deoplete#sources#go#json_directory = ''
 
 " ultisnips
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -291,32 +281,26 @@ inoremap <expr><cr> pumvisible() ? deoplete#mappings#close_popup() : "\<cr>"
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
 
 " ALE
-nnoremap <Leader>aj :ALENextWrap<cr>
-nnoremap <Leader>ak :ALEPreviousWrap<cr>
 let g:ale_open_list = 1
 let g:ale_list_window_size = 3
+let g:ale_sign_error = '⤫'
+let g:ale_sign_warning = '⚠'
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] [%severity%] %s'
-let g:ale_linters_explicit = 1
-let g:ale_fix_on_save = 1
 let g:ale_linters = {
-\   'javascript': ['prettier'],
-\   'go': ['golangci-lint'],
+\   'javascript': ['eslint'],
+\   'go': ['gometalinter'],
 \}
-let g:ale_fixers = {
-\   'javascript': ['prettier_standard']
-\}
-let g:ale_go_golangci_lint_package = 1
-let g:ale_go_golangci_lint_options = '--disable-all'
-\ . ' --enable=govet'
+let g:ale_go_gometalinter_options = '--disable-all'
+\ . ' --enable=vet'
 \ . ' --enable=golint'
 \ . ' --enable=errcheck'
-\ . ' --enable=typecheck'
 \ . ' --enable=ineffassign'
-\ . ' --enable=misspell'
-\ . ' --enable=deadcode'
+\ . ' --enable=goconst'
+\ . ' --enable=goimports'
+\ . ' --enable=lll --line-length=120'
 
 " vim-tmux-navigator
 if has('nvim')
@@ -358,18 +342,16 @@ let g:tagbar_type_go = {
 " vim-go
 let g:go_fmt_command = "goimports"
 let g:go_list_type = "quickfix"
-let g:go_def_mode='godef'
 let g:go_auto_type_info = 1
+set updatetime=1500
 let g:go_metalinter_autosave = 0
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
-let g:go_highlight_fields = 0
+let g:go_highlight_fields = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_interfaces = 1
-let g:go_debug_windows = {
-  \ 'out':   'botright 10new',
-  \ 'vars':  'leftabove 80vnew',
-\ }
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
 autocmd FileType go nmap <leader>r <Plug>(go-run)
 autocmd FileType go nmap <leader>b <Plug>(go-build)
 autocmd FileType go nmap <leader>t <Plug>(go-test)
