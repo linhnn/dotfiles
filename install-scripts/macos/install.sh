@@ -25,7 +25,7 @@ nvm alias default node
 npm install --global prettier
 
 # install Go
-goversion="1.11.4"
+goversion="1.14.4"
 goos="darwin"
 goarch="amd64"
 goname="go$goversion.$goos-$goarch.tar.gz"
