@@ -24,7 +24,6 @@ source $ZSH/oh-my-zsh.sh
 export GOPATH="$HOME/Projects/go"
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 
-# Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
    export EDITOR='vim'
 else
@@ -73,3 +72,24 @@ source ~/powerlevel9k/powerlevel9k.zsh-theme
 #   if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# kubectl autocomplete
+if [ $commands[kubectl] ]; then source <(kubectl completion zsh); fi
+
+export PATH="$PATH:$HOME/.rvm/bin"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
+
+#colorls
+alias lc='colorls -lA --sd'
+source $(dirname $(gem which colorls))/tab_complete.sh
+
+export LC_ALL=en_US.UTF-8
+
+#kubectl-alias
+[ -f ~/.kubectl_aliases ] && source ~/.kubectl_aliases
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /Users/linhnn/.nvm/versions/node/v11.6.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/nguyenlinh/.nvm/versions/node/v11.6.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
+export PATH="/usr/local/opt/php@7.3/bin:$PATH"
+export PATH="/usr/local/opt/php@7.3/sbin:$PATH"

@@ -58,6 +58,7 @@ if [[ $co == "y" ]] || [[ $co == "Y" ]] ; then
     echo "Copying dotfiles"
     cp zshrc ~/.zshrc
     cp tmux.macos.conf ~/.tmux.conf
+    cp tmux.macos.conf.local ~/.tmux.conf.local
     mkdir -p ~/.config
     cp -R nvim ~/.config
 fi
