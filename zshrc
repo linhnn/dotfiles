@@ -93,3 +93,9 @@ export LC_ALL=en_US.UTF-8
 [[ -f /Users/linhnn/.nvm/versions/node/v11.6.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/nguyenlinh/.nvm/versions/node/v11.6.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
 export PATH="/usr/local/opt/php@7.3/bin:$PATH"
 export PATH="/usr/local/opt/php@7.3/sbin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/linhnn/Documents/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/linhnn/Documents/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/linhnn/Documents/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/linhnn/Documents/google-cloud-sdk/completion.zsh.inc'; fi
