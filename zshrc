@@ -13,7 +13,9 @@ CASE_SENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git, kubectl)
+plugins=(git kubectl)
+
+ZSH_DISABLE_COMPFIX=true
 
 export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 source $ZSH/oh-my-zsh.sh
@@ -53,19 +55,21 @@ bindkey '^ ' autosuggest-accept
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
   custom_medium dir vcs newline status
 )
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
+  kubecontext
+)
 POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 ## Add the custom Medium M icon prompt segment
 POWERLEVEL9K_CUSTOM_MEDIUM="echo -n $'\uE711'"
 POWERLEVEL9K_CUSTOM_MEDIUM_FOREGROUND="black"
 POWERLEVEL9K_CUSTOM_MEDIUM_BACKGROUND="white"
-## Add the custom freeCodeCamp prompt segment
+# Add the custom freeCodeCamp prompt segment
 POWERLEVEL9K_CUSTOM_FREECODECAMP="echo Vita"
 POWERLEVEL9K_CUSTOM_FREECODECAMP_FOREGROUND="white"
 POWERLEVEL9K_CUSTOM_FREECODECAMP_BACKGROUND="cyan"
 ## Load Nerd Fonts with Powerlevel9k theme for Zsh
-ddPOWERLEVEL9K_MODE='nerdfont-complete'
-source ~/powerlevel9k/powerlevel9k.zsh-theme
+POWERLEVEL9K_MODE='nerdfont-complete'
+source /usr/local/opt/powerlevel9k/powerlevel9k.zsh-theme
 
 # eval "$(pyenv init -)"
 # eval "$(pyenv virtualenv-init -)"
@@ -81,7 +85,7 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 #colorls
 alias lc='colorls -lA --sd'
-source $(dirname $(gem which colorls))/tab_complete.sh
+#source $(dirname $(gem which colorls))/tab_complete.sh
 
 export LC_ALL=en_US.UTF-8
 
@@ -99,3 +103,6 @@ if [ -f '/Users/linhnn/Documents/google-cloud-sdk/path.zsh.inc' ]; then . '/User
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/linhnn/Documents/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/linhnn/Documents/google-cloud-sdk/completion.zsh.inc'; fi
+
+eval "$(rbenv init -)"
+export PATH="/usr/local/opt/libpq/bin:$PATH"
